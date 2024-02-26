@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-input {
+  @apply w-full py-1 px-2 rounded-md bg-slate-400;
+}
+input {
+  @apply text-black outline-0;
+}
+label {
+  @apply py-2;
+}
+.error {
+  @apply text-red-500 max-w-[300px];
+}
+.btn-submit {
+  @apply bg-blue-500 text-white font-medium py-2 px-4 rounded-md;
+}
