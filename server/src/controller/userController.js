@@ -16,12 +16,18 @@ module.exports = {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.mapped() });
       }
-      const { name, email, password, avatar } = req.body;
-      const userExists = await User.findOne({ email });
-      if (userExists) {
+      const { name, username, email, password, avatar } = req.body;
+      const emailExists = await User.findOne({ email });
+      const userExists = await User.findOne({ username });
+      if (emailExists) {
         return res
           .status(400)
           .json({ errors: { email: { msg: "Email already in use" } } });
+      }
+      if (userExists) {
+        return res
+          .status(400)
+          .json({ errors: { username: { msg: "Username already in use" } } });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -34,6 +40,7 @@ module.exports = {
 
       const user = new User({
         name,
+        username,
         email,
         password: hashedPassword,
         avatarId: selectedAvatar._id,
@@ -44,6 +51,7 @@ module.exports = {
       res.json({
         id: userCreated._id,
         name: userCreated.name,
+        username: userCreated.username,
         email: userCreated.email,
         avatarId: userCreated.avatarId,
         createdAt: userCreated.createdAt,
@@ -69,13 +77,12 @@ module.exports = {
           .json({ errors: { password: { msg: "Incorrect password" } } });
       }
 
-      const userAvatar = await Avatar.findById(user.avatarId);
-
       const token = await createAccesToken({ id: user._id });
       res.cookie("token", token);
       res.json({
         id: user._id,
         name: user.name,
+        username: user.username,
         email: user.email,
         avatarId: user.avatarId,
         createdAt: user.createdAt,
@@ -130,10 +137,47 @@ module.exports = {
       return res.json({
         id: foundUser._id,
         name: foundUser.name,
+        username: foundUser.username,
         email: foundUser.email,
         avatarId: foundUser.avatarId,
         createdAt: foundUser.createdAt,
       });
     });
+  },
+  getUserByIdOrName: async (req, res) => {
+    try {
+      let user;
+      if (req.params.username) {
+        user = await User.findOne({ username: req.params.username }).populate(
+          "avatarId"
+        );
+      }
+
+      if (!user) {
+        return res.status(404).json({ errors: { msg: "User not found" } });
+      }
+
+      res.json({
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        avatarId: user.avatarId,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      });
+    } catch (error) {
+      console.error("Error al obtener usuario:", error);
+      res.status(500).json({ message: error.message });
+    }
+  },
+  getAllUsers: async (req, res) => {
+    try {
+      const users = await User.find();
+
+      res.json(users);
+    } catch (error) {
+      console.error("Error al obtener usuarios:", error);
+    }
   },
 };

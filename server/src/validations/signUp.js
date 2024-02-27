@@ -7,13 +7,26 @@ module.exports = [
     .bail()
     .custom((value) => {
       if (/\s/.test(value)) {
-        throw new Error("Username must not contain spaces");
+        throw new Error("Name must not contain spaces");
       }
       return true;
     })
     .bail()
     .isLength({ min: 3, max: 20 })
     .withMessage("Name must be between 3 and 20 characters"),
+  body("username")
+    .notEmpty()
+    .withMessage("Username is required")
+    .bail()
+    .custom((value) => {
+      if (/\s/.test(value)) {
+        throw new Error("Username must not contain spaces");
+      }
+      return true;
+    })
+    .bail()
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Username must be between 3 and 20 characters"),
   body("email")
     .notEmpty()
     .withMessage("Email is required")

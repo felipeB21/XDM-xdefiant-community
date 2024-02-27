@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
-import Header from "@/components/Header";
+import Aside from "@/components/Aside";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,10 +13,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`bg-slate-800 text-slate-50 ${inter.className}`}>
+      <body className={`bg-neutral-800 text-slate-50 ${inter.className}`}>
         <AuthProvider>
-          <Header />
-          {children}
+          <div className="grid grid-cols-[270px_minmax(900px,_1fr)]">
+            <Aside />
+            {children}
+          </div>
         </AuthProvider>
       </body>
     </html>

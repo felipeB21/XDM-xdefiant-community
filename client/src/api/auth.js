@@ -21,3 +21,8 @@ export const getAvatarsRequest = async () => {
   const res = await axios.get("/avatars");
   return res;
 };
+
+export const getUserRequest = async (username) => {
+  const res = await axios.get(`/user/${username}`);
+  return res;
+};

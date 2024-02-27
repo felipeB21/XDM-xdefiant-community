@@ -20,6 +20,7 @@ export default function SignIn() {
 
     if (isAuthenticated) {
       router.push("/");
+      router.refresh();
     }
   }, [isAuthenticated]);
 

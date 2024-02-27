@@ -5,6 +5,7 @@ import {
   signInRequest,
   verifyTokenRequest,
   getAvatarsRequest,
+  getUserRequest,
 } from "@/api/auth";
 import Cookies from "js-cookie";
 
@@ -20,6 +21,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [avatars, setAvatars] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState(null);
@@ -55,11 +57,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getUser = async (username) => {
+    try {
+      const res = await getUserRequest(username);
+      setProfile(res.data);
+    } catch (error) {
+      setErrors(error.response.data.errors);
+    }
+  };
+
   const signOut = () => {
-    Cookies.remove("token"); // Limpiar la cookie del token al cerrar sesión
-    setUser(null); // Limpiar los datos del usuario
-    setIsAuthenticated(false); // Establecer isAuthenticated en false
-    setLoading(false); // Establecer loading en false
+    Cookies.remove("token");
+    setUser(null);
+    setIsAuthenticated(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -83,7 +94,6 @@ export const AuthProvider = ({ children }) => {
         setUser(response.data);
         setLoading(false);
       } catch (error) {
-        console.log(error);
         setIsAuthenticated(false);
         setUser(null);
         setLoading(false);
@@ -97,8 +107,10 @@ export const AuthProvider = ({ children }) => {
       value={{
         signUp,
         signIn,
-        signOut, // Agregar la función de cierre de sesión al contexto
+        getUser,
+        signOut,
         getAvatars,
+        profile,
         avatars,
         user,
         isAuthenticated,

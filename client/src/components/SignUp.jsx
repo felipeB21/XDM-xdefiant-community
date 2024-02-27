@@ -53,6 +53,12 @@ export default function SignUp() {
         <input className="form-input" type="text" {...register("name")} />
         {errors.name && <p className="error">{errors.name.message}</p>}
         {authErrors?.name && <p className="error">{authErrors.name.msg}</p>}
+        <label htmlFor="username">Username</label>
+        <input type="text" {...register("username")} className="form-input" />
+        {errors.username && <p className="error">{errors.username.message}</p>}
+        {authErrors?.username && (
+          <p className="error">{authErrors.username.msg}</p>
+        )}
         <label htmlFor="email">Email</label>
         <input type="email" {...register("email")} className="form-input" />
         {errors.email && <p className="error">{errors.email.message}</p>}
