@@ -1,12 +1,12 @@
 "use client";
-import Weapons from "@/components/Weapons";
+import WeaponId from "@/components/WeaponId";
 import React from "react";
-import { WeaponProvider } from "../context/WeaponContext";
+import { WeaponProvider } from "@/app/context/WeaponContext";
 
 export default function page() {
   return (
     <WeaponProvider>
-      <Weapons />
+      <WeaponId />
     </WeaponProvider>
   );
 }

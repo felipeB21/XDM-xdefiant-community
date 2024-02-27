@@ -33,3 +33,16 @@ label {
     transform: rotate(360deg);
   }
 }
+.custom-shadow {
+  --shadow-color: rgba(25, 27, 31, 0.742);
+  --shadow-x: 0;
+  --shadow-y: 3px;
+  --shadow-blur: 30px;
+  --shadow-spread: 0;
+
+  box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur)
+    var(--shadow-spread) var(--shadow-color);
+}
+.custom-shadow:hover {
+  --shadow-color: rgba(0, 17, 31, 0.742);
+}

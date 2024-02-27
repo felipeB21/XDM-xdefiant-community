@@ -6,10 +6,22 @@ mongoose.Promise = global.Promise;
 
 const weaponSchema = new Schema(
   {
-    name: {
+    class: {
       type: String,
       required: true,
     },
+    types: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        imageUrl: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
