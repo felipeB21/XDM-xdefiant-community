@@ -1,80 +1,146 @@
 "use client";
-import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { GiMachineGunMagazine } from "react-icons/gi";
-import { GiPistolGun } from "react-icons/gi";
-import { FaPeopleGroup, FaUser } from "react-icons/fa6";
-import LoadingIcon from "./LoadingIcon";
+import React, { useState } from "react";
+import logo from "../../public/logo.webp";
+import Image from "next/image";
+import {
+  HomeIcon,
+  GunsIcon,
+  FactionIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+  MessagesIcon,
+  UsersIcon,
+  LoadoutIcon,
+  SignInIcon,
+} from "@/components/icons/Icons";
+import { usePathname } from "next/navigation";
 
-const links = [
-  { name: "Weapons", href: "/weapons", icon: <GiPistolGun /> },
-  { name: "Loadouts", href: "/loadouts", icon: <GiMachineGunMagazine /> },
-  { name: "Factions", href: "/factions", icon: <FaPeopleGroup /> },
+const hubLinks = [
+  { name: "Home", url: "/", icon: <HomeIcon /> },
+  { name: "Weapons", url: "/weapons", icon: <GunsIcon /> },
+  { name: "Factions", url: "/factions", icon: <FactionIcon /> },
+  { name: "Loadouts", url: "/loadouts", icon: <LoadoutIcon /> },
+];
+
+const userLinks = [
+  { name: "Posts", url: "/posts", icon: <MessagesIcon /> },
+  { name: "Users", url: "/users", icon: <UsersIcon /> },
 ];
 
 export default function Aside() {
-  const { user, isAuthenticated, loading } = useAuth();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const pathname = usePathname();
+  const [hubOpen, setHubOpen] = useState(true);
+  const [userOpen, setUserOpen] = useState(true);
 
-  useEffect(() => {
-    setIsLoaded(!loading && isAuthenticated);
-  }, [loading, isAuthenticated]);
+  const toggleHubMenu = () => {
+    setHubOpen(!hubOpen);
+  };
+
+  const toggleUserMenu = () => {
+    setUserOpen(!userOpen);
+  };
 
   return (
-    <aside className=" h-full static py-12 bg-neutral-900">
-      <div className="flex flex-col justify-between items-center">
-        <div className="flex flex-col gap-10">
-          <Link className="flex flex-col text-2xl p-4 font-bold" href="/">
-            XDMUNITY
-            <span className="text-sm text-blue-300">XDefiant Community</span>
-          </Link>
-          <nav className="flex flex-col">
-            <ul className="flex flex-col">
-              {links.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    className="flex rounded hover:bg-neutral-800 items-center p-4 gap-4 hover:text-blue-400 duration-150"
-                    href={link.href}
-                  >
-                    <div className="text-blue-400">{link.icon}</div>
-                    <p className="text-lg">{link.name}</p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+    <aside className="bg-neutral-800 h-screen fixed left-0 px-10">
+      <div className="flex items-center justify-center">
+        <div className="flex flex-col justify-between items-center">
+          <div className="flex flex-col gap-10 py-10">
             <div>
-              {loading ? (
+              <Link
+                className="font-bold uppercase flex items-center gap-2"
+                href={"/"}
+              >
+                <Image
+                  className="w-auto h-auto"
+                  src={logo}
+                  alt="logo"
+                  width={50}
+                  height={50}
+                />
                 <div>
-                  <LoadingIcon />
+                  <p className="text-xs">XDefiant loadout</p>
+                  <h2 className="text-xl">XDMunity</h2>
                 </div>
-              ) : (
-                <div>
-                  {isAuthenticated && user ? (
-                    <Link
-                      className="flex rounded hover:bg-neutral-800 p-4 items-center gap-4 hover:text-blue-400 duration-150"
-                      href={`/user/${user.username}`}
-                    >
-                      <div className="text-blue-400">
-                        <FaUser />
-                      </div>
-                      <p className="text-lg">Profile</p>
-                    </Link>
-                  ) : (
-                    <Link
-                      className="flex rounded hover:bg-neutral-800 p-4 items-center gap-4  hover:text-blue-400 duration-150"
-                      href="/signin"
-                    >
-                      <div className="text-blue-400">
-                        <FaUser />
-                      </div>
-                      <p className="text-lg">Sign in</p>
-                    </Link>
-                  )}
-                </div>
-              )}
+              </Link>
             </div>
-          </nav>
+            <nav>
+              <button
+                className="flex items-center gap-3 mb-4"
+                onClick={toggleHubMenu}
+              >
+                <h4 className="font-bold text-lg">Hub</h4>
+                {hubOpen ? <ArrowDownIcon /> : <ArrowUpIcon />}
+              </button>
+              {hubOpen && (
+                <ul className="flex flex-col">
+                  {hubLinks.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        className="flex items-center gap-3 hover:bg-neutral-700/70 py-6 px-3 rounded"
+                        href={link.url}
+                      >
+                        {link.icon}
+                        <p
+                          className={
+                            pathname === link.url
+                              ? "font-medium text-white"
+                              : "text-neutral-300"
+                          }
+                        >
+                          {link.name}
+                        </p>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </nav>
+            <nav>
+              <button
+                className="flex items-center gap-3 mb-4"
+                onClick={toggleUserMenu}
+              >
+                <h4 className="font-bold text-lg">User</h4>
+                {userOpen ? <ArrowDownIcon /> : <ArrowUpIcon />}
+              </button>
+              {userOpen && (
+                <ul className="flex flex-col">
+                  {userLinks.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        className="flex items-center gap-3 hover:bg-neutral-700/70 py-6 px-3 rounded"
+                        href={link.url}
+                      >
+                        {link.icon}
+                        <p
+                          className={
+                            pathname === link.url
+                              ? "font-medium text-white"
+                              : "text-neutral-300"
+                          }
+                        >
+                          {link.name}
+                        </p>
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link
+                      className="flex items-center gap-3 hover:bg-neutral-700/70 py-6 px-3 rounded"
+                      href={"/login"}
+                    >
+                      <SignInIcon />
+                      <p className="text-neutral-300">Sign in</p>
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </nav>
+          </div>
+          <p className="text-sm text-neutral-300">
+            XDMunity all rights reserved
+          </p>
         </div>
       </div>
     </aside>
