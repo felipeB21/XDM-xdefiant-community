@@ -30,7 +30,7 @@ export default function Users() {
   return (
     <div className="absolute w-[72vw] mx-auto left-96 mt-16">
       <h4 className="text-2xl font-bold mb-4">Users</h4>
-      <div className="grid grid-cols-5">
+      <div className="grid grid-cols-5 gap-5">
         {data.map((user) => (
           <div className="flex items-center gap-3" key={user._id}>
             <Image

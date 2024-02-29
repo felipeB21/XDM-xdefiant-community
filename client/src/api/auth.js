@@ -12,6 +12,15 @@ export const getUsers = async () => {
 };
 
 export const signIn = async (user) => {
-  const response = await authApi.post("/signin", user);
+  const response = await authApi.post("/signin", user, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+export const signUp = async (user) => {
+  const response = await authApi.post("/signup", user, {
+    withCredentials: true,
+  });
   return response.data;
 };
