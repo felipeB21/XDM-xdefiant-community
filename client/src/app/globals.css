@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+label {
+  @apply my-2;
+}
+
+.input-form {
+  @apply w-full p-3 rounded-md text-white bg-neutral-600;
+}
+.btn-form {
+  @apply w-full p-3 rounded-md text-white bg-neutral-950 border border-neutral-700 mt-10 cursor-pointer;
+}

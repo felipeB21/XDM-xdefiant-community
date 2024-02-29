@@ -10,3 +10,8 @@ export const getUsers = async () => {
   const response = await authApi.get("/users");
   return response.data;
 };
+
+export const signIn = async (user) => {
+  const response = await authApi.post("/signin", user);
+  return response.data;
+};

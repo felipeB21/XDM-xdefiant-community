@@ -1,8 +1,9 @@
 "use client";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import React, { useState } from "react";
-import logo from "../../public/logo.webp";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import SignIn from "./SignIn";
 import {
   HomeIcon,
   GunsIcon,
@@ -14,7 +15,7 @@ import {
   LoadoutIcon,
   SignInIcon,
 } from "@/components/icons/Icons";
-import { usePathname } from "next/navigation";
+import logo from "../../public/logo.webp";
 
 const hubLinks = [
   { name: "Home", url: "/", icon: <HomeIcon /> },
@@ -57,6 +58,7 @@ export default function Aside() {
                   alt="logo"
                   width={50}
                   height={50}
+                  priority
                 />
                 <div>
                   <p className="text-xs">XDefiant loadout</p>
@@ -127,11 +129,11 @@ export default function Aside() {
                   ))}
                   <li>
                     <Link
-                      className="flex items-center gap-3 hover:bg-neutral-700/70 py-6 px-3 rounded"
-                      href={"/login"}
+                      href="/signin"
+                      className="flex items-center w-full gap-3 hover:bg-neutral-700/70 py-6 px-3 rounded"
                     >
                       <SignInIcon />
-                      <p className="text-neutral-300">Sign in</p>
+                      <p className="text-neutral-300">Sign In</p>
                     </Link>
                   </li>
                 </ul>

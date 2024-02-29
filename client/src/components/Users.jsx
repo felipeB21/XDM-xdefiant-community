@@ -32,7 +32,7 @@ export default function Users() {
       <h4 className="text-2xl font-bold mb-4">Users</h4>
       <div className="grid grid-cols-5">
         {data.map((user) => (
-          <div className="flex items-center gap-3" key={user.id}>
+          <div className="flex items-center gap-3" key={user._id}>
             <Image
               className="w-[50px] h-[50px] object-cover rounded-full"
               src={user.avatarId.imageUrl}
