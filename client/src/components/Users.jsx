@@ -2,6 +2,7 @@
 import { useQuery } from "react-query";
 import { getUsers } from "@/api/auth";
 import Image from "next/image";
+import Link from "next/link";
 export default function Users() {
   const { isLoading, data, isError, error } = useQuery({
     queryKey: ["users"],
@@ -26,7 +27,11 @@ export default function Users() {
       <h4 className="text-2xl font-bold mb-4">Users</h4>
       <div className="grid grid-cols-5 gap-5">
         {data.map((user) => (
-          <div className="flex items-center gap-3" key={user._id}>
+          <Link
+            href={`/users/${user.username}`}
+            className="flex items-center gap-3"
+            key={user._id}
+          >
             <Image
               className="w-[50px] h-[50px] object-cover rounded-full"
               src={user.avatarId.imageUrl}
@@ -38,7 +43,7 @@ export default function Users() {
               <h4>{user.name}</h4>
               <p className="text-sm text-neutral-300">@{user.username}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

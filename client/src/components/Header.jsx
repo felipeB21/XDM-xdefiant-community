@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
 
 import {
   HomeIcon,
@@ -13,6 +14,7 @@ import {
   UsersIcon,
   LoadoutIcon,
   SignInIcon,
+  LoadingIcon,
 } from "@/components/icons/Icons";
 import logo from "../../public/logo.webp";
 
@@ -25,12 +27,8 @@ const links = [
 ];
 
 export default function Header() {
-  const router = useRouter();
   const pathname = usePathname();
-  const [hubOpen, setHubOpen] = useState(true);
-  const [userOpen, setUserOpen] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const { user, loading, isAuthenticated } = useAuth();
 
   return (
     <header className="bg-neutral-800 py-2 fixed top-0 w-full">
@@ -68,13 +66,29 @@ export default function Header() {
             </ul>
           </nav>
         </div>
-        <Link
-          className="flex items-center gap-3 border border-neutral-500 py-2 px-4 hover:bg-neutral-950 duration-150 rounded-md"
-          href={"/signin"}
-        >
-          <SignInIcon />
-          <p className="text-sm">Sign In</p>
-        </Link>
+        {loading ? (
+          <LoadingIcon />
+        ) : isAuthenticated && user ? (
+          <div className="flex items-center gap-3">
+            <Link href={`/users/${user.username}`}>
+              <Image
+                className="w-[50px] h-[50px] rounded-full object-cover"
+                src={user.avatarId.imageUrl}
+                alt={user.name}
+                width={60}
+                height={60}
+              />
+            </Link>
+          </div>
+        ) : (
+          <Link
+            className="flex items-center gap-3 border border-neutral-500 py-2 px-4 hover:bg-neutral-950 duration-150 rounded-md"
+            href={"/signin"}
+          >
+            <SignInIcon />
+            <p className="text-sm">Sign In</p>
+          </Link>
+        )}
       </div>
     </header>
   );

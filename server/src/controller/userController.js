@@ -141,6 +141,7 @@ module.exports = {
         email: foundUser.email,
         avatarId: foundUser.avatarId,
         createdAt: foundUser.createdAt,
+        updatedAt: foundUser.updatedAt,
       });
     });
   },
