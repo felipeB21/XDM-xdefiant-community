@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Aside from "@/components/Aside";
+import Header from "@/components/Header";
+import { AuthProvider } from "./context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,10 +14,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`bg-neutral-900 text-white ${inter.className}`}>
-        <div className="flex">
-          <Aside />
+        <AuthProvider>
+          <Header />
           {children}
-        </div>
+        </AuthProvider>
       </body>
     </html>
   );

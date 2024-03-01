@@ -1,97 +1,123 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useMutation } from "react-query";
-import { signUp } from "@/api/auth";
+import { getAvatars } from "@/api/auth";
+import { useQuery } from "react-query";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function SignUp() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const router = useRouter();
-  const [error, setError] = useState(null);
-  const [avatars, setAvatars] = useState([]);
-  const [selectedAvatar, setSelectedAvatar] = useState("");
 
-  const signUpUserMutation = useMutation({
-    mutationFn: signUp,
-    onSuccess: () => {
+  const { signUpContext, isAuthenticated, error } = useAuth();
+  const [selectedAvatarName, setSelectedAvatarName] = useState(null);
+
+  useEffect(() => {
+    console.log("isAuthenticated:", isAuthenticated);
+    if (isAuthenticated) {
+      console.log("Redirecting to /");
       router.push("/");
-    },
-    onError: (error) => {
-      setError(error.response.data.errors);
-    },
+    }
+  }, [isAuthenticated]);
+
+  const onSubmit = handleSubmit(async (data) => {
+    const userData = { ...data, avatar: selectedAvatarName };
+    signUpContext(userData);
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const user = Object.fromEntries(formData);
-    user.avatar = selectedAvatar;
-    signUpUserMutation.mutate(user);
-  };
-  useEffect(() => {
-    const fetchAvatars = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/api/v2/avatars");
-        if (!response.ok) {
-          throw new Error("Failed to fetch avatars");
-        }
-        const avatarsData = await response.json();
-        setAvatars(avatarsData);
-      } catch (error) {
-        console.error("Error fetching avatars:", error);
-      }
-    };
+  const {
+    isLoading,
+    data: avatars,
+    isError,
+  } = useQuery({
+    queryKey: ["avatars"],
+    queryFn: getAvatars,
+  });
 
-    fetchAvatars();
-  }, []);
+  const handleAvatarSelect = (avatarName) => {
+    setSelectedAvatarName(avatarName);
+  };
 
   return (
-    <div className="absolute w-[30vw] left-[40vw] mt-20">
-      <form onSubmit={handleSubmit} className="flex flex-col">
+    <div className="mt-10 flex flex-col items-center justify-center h-screen">
+      <form onSubmit={onSubmit} className="flex flex-col">
         <h4 className="text-2xl font-medium mb-10">Sign Up</h4>
         <label htmlFor="email">Email</label>
-        <input className="input-form" type="email" name="email" />
-        {error?.email && <p className="text-red-500 mb-4">{error.email.msg}</p>}
+        <input
+          className="input-form"
+          type="email"
+          {...register("email", { required: true })}
+        />
+        {errors.email && <p className="error">Email is required</p>}
+        {error?.email && <p className="error">{error.email.msg}</p>}
         <label htmlFor="name">Name</label>
-        <input className="input-form" type="text" name="name" />
-        {error?.name && <p className="text-red-500 mb-4">{error.name.msg}</p>}
+        <input
+          className="input-form"
+          type="text"
+          {...register("name", { required: true })}
+        />
+        {errors.name && <p className="error">Name is required</p>}
+        {error?.name && <p className="error">{error.name.msg}</p>}
         <label htmlFor="username">Username</label>
-        <input className="input-form" type="text" name="username" />
-        {error?.username && (
-          <p className="text-red-500 mb-4">{error.username.msg}</p>
-        )}
+        <input
+          className="input-form"
+          type="text"
+          {...register("username", { required: true })}
+        />
+        {errors.username && <p className="error">Username is required</p>}
+        {error?.username && <p className="error">{error.username.msg}</p>}
         <label htmlFor="password">Password</label>
-        <input className="input-form" type="password" name="password" />
-        {error?.password && (
-          <p className="text-red-500 mb-4">{error.password.msg}</p>
-        )}
+        <input
+          className="input-form"
+          type="password"
+          {...register("password", { required: true })}
+        />
+        {errors.password && <p className="error">Password is required</p>}
+        {error?.password && <p className="error">{error.password.msg}</p>}
         <label htmlFor="confirmPassword">Confirm Password</label>
-        <input className="input-form" type="password" name="confirmPassword" />
+        <input
+          className="input-form"
+          type="password"
+          {...register("confirmPassword", { required: true })}
+        />
+        {errors.confirmPassword && (
+          <p className="error">Confirm Password is required</p>
+        )}
         {error?.confirmPassword && (
-          <p className="text-red-500 mb-4">{error.confirmPassword.msg}</p>
+          <p className="error">{error.confirmPassword.msg}</p>
         )}
         <label htmlFor="avatar">Avatar</label>
-        <div className="flex items-center justify-between mt-3">
-          {avatars.map((avatar) => (
-            <div
-              key={avatar._id}
-              className={`cursor-pointer mr-2 ${
-                selectedAvatar === avatar.name
-                  ? "border-2 border-blue-500 rounded-full"
-                  : ""
-              }`}
-              onClick={() => setSelectedAvatar(avatar.name)}
-            >
-              <Image
-                src={avatar.imageUrl}
-                alt={avatar.name}
-                width={50}
-                height={50}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-            </div>
-          ))}
+        <div className="flex items-center gap-3 mt-3">
+          {isLoading ? (
+            <p>Loading avatars...</p>
+          ) : isError ? (
+            <p>Error loading avatars</p>
+          ) : (
+            avatars.map((avatar) => (
+              <div key={avatar.name}>
+                <Image
+                  className={`rounded-full cursor-pointer object-cover w-[60px] h-[60px] ${
+                    selectedAvatarName === avatar.name
+                      ? "border-2 border-blue-500"
+                      : ""
+                  }`}
+                  src={avatar.imageUrl}
+                  alt={avatar.name}
+                  width={60}
+                  height={60}
+                  priority
+                  onClick={() => handleAvatarSelect(avatar.name)} // Call handleAvatarSelect with the avatar name when clicked
+                />
+              </div>
+            ))
+          )}
         </div>
         {error?.avatar && (
           <p className="text-red-500 mb-4">{error.avatar.msg}</p>

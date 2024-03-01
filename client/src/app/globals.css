@@ -12,3 +12,6 @@ label {
 .btn-form {
   @apply w-full py-2 rounded-md text-white bg-neutral-950 border border-neutral-700 mt-10 cursor-pointer;
 }
+.error {
+  @apply text-red-500 py-1 text-sm;
+}

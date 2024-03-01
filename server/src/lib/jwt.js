@@ -7,7 +7,7 @@ module.exports = (payload) => {
       payload,
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "30d",
       },
       (err, token) => {
         if (err) reject(err);

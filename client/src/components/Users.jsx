@@ -9,26 +9,20 @@ export default function Users() {
   });
 
   if (isLoading) {
-    return (
-      <div className="absolute w-[72vw] mx-auto left-96 mt-16">Loading...</div>
-    );
+    return <div className="mt-24 w-[1200px] mx-auto">Loading...</div>;
   }
 
   if (isError) {
     return (
-      <div className="absolute w-[72vw] mx-auto left-96 mt-16">
-        Error: {error.message}
-      </div>
+      <div className="mt-24 w-[1200px] mx-auto">Error: {error.message}</div>
     );
   }
 
   if (!data) {
-    return (
-      <div className="absolute w-[72vw] mx-auto left-96 mt-16">No data</div>
-    );
+    return <div className="mt-24 w-[1200px] mx-auto">No data</div>;
   }
   return (
-    <div className="absolute w-[72vw] mx-auto left-96 mt-16">
+    <div className="mt-24 w-[1200px] mx-auto">
       <h4 className="text-2xl font-bold mb-4">Users</h4>
       <div className="grid grid-cols-5 gap-5">
         {data.map((user) => (

@@ -12,15 +12,22 @@ export const getUsers = async () => {
 };
 
 export const signIn = async (user) => {
-  const response = await authApi.post("/signin", user, {
-    withCredentials: true,
+  const response = await authApi.post("/signin", user);
+  return response.data;
+};
+
+export const verifyToken = async () => {
+  const response = await authApi.get("/verify", {
+    headers: { Authorization: `Bearer ${token}` },
   });
+};
+
+export const getAvatars = async () => {
+  const response = await authApi.get("/avatars");
   return response.data;
 };
 
 export const signUp = async (user) => {
-  const response = await authApi.post("/signup", user, {
-    withCredentials: true,
-  });
+  const response = await authApi.post("/signup", user);
   return response.data;
 };
