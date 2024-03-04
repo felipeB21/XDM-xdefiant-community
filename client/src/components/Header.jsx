@@ -1,9 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 
 import {
@@ -28,7 +27,13 @@ const links = [
 
 export default function Header() {
   const pathname = usePathname();
-  const { user, loading, isAuthenticated } = useAuth();
+  const { user, loading, isAuthenticated, updateUser } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      updateUser();
+    }
+  }, [isAuthenticated, updateUser]);
 
   return (
     <header className="bg-neutral-800 py-2 fixed top-0 w-full">
@@ -66,9 +71,7 @@ export default function Header() {
             </ul>
           </nav>
         </div>
-        {loading ? (
-          <LoadingIcon />
-        ) : isAuthenticated && user ? (
+        {isAuthenticated && user ? (
           <div className="flex items-center gap-3">
             <Link href={`/users/${user.username}`}>
               <Image
@@ -80,6 +83,8 @@ export default function Header() {
               />
             </Link>
           </div>
+        ) : loading ? (
+          <LoadingIcon />
         ) : (
           <Link
             className="flex items-center gap-3 border border-neutral-500 py-2 px-4 hover:bg-neutral-950 duration-150 rounded-md"

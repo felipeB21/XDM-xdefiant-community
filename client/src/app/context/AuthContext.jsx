@@ -19,6 +19,32 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const updateUser = async () => {
+    const cookies = Cookies.get();
+    if (!cookies.token) {
+      setIsAuthenticated(false);
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await verifyToken(cookies.token);
+      if (!response.data) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+      setIsAuthenticated(true);
+      setUser(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsAuthenticated(false);
+      setUser(null);
+      setLoading(false);
+    }
+  };
+
   const signUpContext = async (userData) => {
     try {
       const response = await signUp(userData);
@@ -36,39 +62,12 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data);
       setIsAuthenticated(true);
     } catch (error) {
-      console.error("Error in signInContext:", error);
       setError(error.response?.data?.errors);
     }
   };
 
   useEffect(() => {
-    async function checkAuth() {
-      const cookies = Cookies.get();
-      if (!cookies.token) {
-        setIsAuthenticated(false);
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-      try {
-        const response = await verifyToken(cookies.token);
-        if (!response.data) {
-          setIsAuthenticated(false);
-          setLoading(false);
-          return;
-        }
-
-        setIsAuthenticated(true);
-        setUser(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setIsAuthenticated(false);
-        setUser(null);
-        setLoading(false);
-      }
-    }
-    checkAuth();
+    updateUser();
   }, []);
 
   return (
@@ -80,6 +79,7 @@ export const AuthProvider = ({ children }) => {
         user,
         error,
         isAuthenticated,
+        updateUser,
       }}
     >
       {children}

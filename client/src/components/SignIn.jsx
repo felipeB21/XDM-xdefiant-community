@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/app/context/AuthContext";
@@ -10,7 +10,6 @@ export default function SignIn() {
   const { signInContext, isAuthenticated, error, loading } = useAuth();
 
   useEffect(() => {
-    console.log("isAuthenticated:", isAuthenticated);
     if (!loading && isAuthenticated) {
       router.push("/");
     }

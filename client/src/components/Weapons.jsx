@@ -39,7 +39,7 @@ export default function Weapons() {
             <div className="flex flex-grow justify-between">
               {weapon.types.map((type) => (
                 <Link href={`/weapons/${type._id}`} key={type._id}>
-                  <h4 className="absolute z-20 bg-sky-500 font-bold py-1 px-3 rounded-tl-lg rounded-br-lg">
+                  <h4 className="absolute z-20 bg-sky-500 font-bold py-2 px-5 rounded-tl-lg rounded-br-lg">
                     {type.name}
                   </h4>
                   <Image

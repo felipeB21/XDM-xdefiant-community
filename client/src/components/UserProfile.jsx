@@ -32,7 +32,7 @@ export default function UserProfile() {
 
   if (!user) return <div className="mt-24 w-[1200px] mx-auto">No data</div>;
   return (
-    <div class="absolute top-0 z-[-2] h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
+    <div className="absolute top-0 z-[-2] h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
       <div className="mt-24 w-[1200px] mx-auto">
         <div className="flex gap-4">
           <Image
@@ -41,6 +41,7 @@ export default function UserProfile() {
             alt="avatar"
             width={150}
             height={150}
+            priority
           />
           <div className="my-3">
             <h4 className="text-xl font-bold">{user.name}</h4>
