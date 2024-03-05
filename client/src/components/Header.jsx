@@ -71,28 +71,32 @@ export default function Header() {
             </ul>
           </nav>
         </div>
-        {isAuthenticated && user ? (
-          <div className="flex items-center gap-3">
-            <Link href={`/users/${user.username}`}>
-              <Image
-                className="w-[50px] h-[50px] rounded-full object-cover"
-                src={user.avatarId.imageUrl}
-                alt={user.name}
-                width={60}
-                height={60}
-              />
-            </Link>
-          </div>
-        ) : loading ? (
+        {loading ? (
           <LoadingIcon />
         ) : (
-          <Link
-            className="flex items-center gap-3 border border-neutral-500 py-2 px-4 hover:bg-neutral-950 duration-150 rounded-md"
-            href={"/signin"}
-          >
-            <SignInIcon />
-            <p className="text-sm">Sign In</p>
-          </Link>
+          <>
+            {isAuthenticated && user ? (
+              <div className="flex items-center gap-3">
+                <Link href={`/users/${user.username}`}>
+                  <Image
+                    className="w-[50px] h-[50px] rounded-full object-cover"
+                    src={user.avatarId.imageUrl}
+                    alt={user.name}
+                    width={60}
+                    height={60}
+                  />
+                </Link>
+              </div>
+            ) : (
+              <Link
+                className="flex items-center gap-3 border border-neutral-500 py-2 px-4 hover:bg-neutral-950 duration-150 rounded-md"
+                href={"/signin"}
+              >
+                <SignInIcon />
+                <p className="text-sm">Sign In</p>
+              </Link>
+            )}
+          </>
         )}
       </div>
     </header>
