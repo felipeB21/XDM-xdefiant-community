@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { getWeapon } from "@/api/weapons";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import ReturnButton from "./button/ReturnButton";
 
 export default function WeaponId() {
   const { id } = useParams();
@@ -28,6 +29,7 @@ export default function WeaponId() {
   }
   return (
     <div className="mt-24 w-[1200px] mx-auto">
+      <ReturnButton path="/weapons" />
       <div>
         <h2 className="text-3xl font-bold mb-4">{weapon.type.name}</h2>
         <Image

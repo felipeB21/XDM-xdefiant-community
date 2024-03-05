@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 import {
   HomeIcon,
@@ -27,13 +28,15 @@ const links = [
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, loading, isAuthenticated, updateUser } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
       updateUser();
+      router.asPath;
     }
-  }, [isAuthenticated, updateUser]);
+  }, [isAuthenticated]);
 
   return (
     <header className="bg-neutral-800 py-2 fixed top-0 w-full">
