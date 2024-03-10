@@ -10,7 +10,6 @@ export default function ReturnButton({ path }) {
       href={path}
     >
       <ReturnIcon />
-      Go Back
     </Link>
   );
 }

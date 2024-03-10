@@ -1,10 +1,14 @@
+"use client";
 import Factions from "@/components/Factions";
 import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 export default function page() {
   return (
-    <div className="mt-24 w-[1200px] mx-auto">
+    <QueryClientProvider client={queryClient}>
       <Factions />
-    </div>
+    </QueryClientProvider>
   );
 }

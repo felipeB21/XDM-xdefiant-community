@@ -10,6 +10,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 const userRouter = require("./router/userRouter");
 const weaponRouter = require("./router/weaponRouter");
+const factionRouter = require("./router/factionRouter");
 
 app.use(
   cors({
@@ -27,3 +28,4 @@ app.listen(PORT, () => {
 
 app.use("/api/v2", userRouter);
 app.use("/api/v2", weaponRouter);
+app.use("/api/v2", factionRouter);

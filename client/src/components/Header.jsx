@@ -19,11 +19,11 @@ import {
 import logo from "../../public/logo.webp";
 
 const links = [
-  { name: "Home", url: "/", icon: <HomeIcon /> },
-  { name: "Weapons", url: "/weapons", icon: <GunsIcon /> },
-  { name: "Factions", url: "/factions", icon: <FactionIcon /> },
-  { name: "Loadouts", url: "/loadouts", icon: <LoadoutIcon /> },
-  { name: "Users", url: "/users", icon: <UsersIcon /> },
+  { name: "Home", url: "/" },
+  { name: "Weapons", url: "/weapons" },
+  { name: "Factions", url: "/factions" },
+  { name: "Loadouts", url: "/loadouts" },
+  { name: "Users", url: "/users" },
 ];
 
 export default function Header() {
@@ -62,11 +62,10 @@ export default function Header() {
                 <li key={link.name}>
                   <Link
                     href={link.url}
-                    className={`flex items-center gap-2 ${
+                    className={`flex items-center gap-2 hover:bg-neutral-600/70 py-1 px-2 rounded-full ${
                       pathname === link.url ? "font-medium" : "text-neutral-300"
                     }`}
                   >
-                    {link.icon}
                     <p className="text-sm">{link.name}</p>
                   </Link>
                 </li>
